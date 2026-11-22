@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>我是哪一隻情緒小怪獸？</title>
+<style>
+:root{--bg:#fff8ee;--card:#fff;--ink:#3a2f2a;--sub:#7a6a60;--line:#f0e2d0;--accent:#ff8a4c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#241d19;--card:#322823;--ink:#f6ece3;--sub:#c3b2a5;--line:#4a3b32}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.6}
+.wrap{max-width:640px;margin:0 auto;padding:20px 16px 40px}
+.card{background:var(--card);border:2px solid var(--line);border-radius:24px;padding:24px 20px;text-align:center}
+h1{font-size:28px;margin:8px 0}
+h2{font-size:21px;margin:8px 0 16px}
+.big{font-size:72px;line-height:1.1}
+.row{display:flex;justify-content:center;gap:4px;flex-wrap:wrap}
+.pr{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:15px;color:var(--ink)}
+.pr span.l{width:84px;text-align:left;font-weight:600}
+.pr .t{flex:1;height:14px;background:var(--line);border-radius:9px;overflow:hidden}
+.pr .t i{display:block;height:100%;border-radius:9px}
+.pr span.v{width:44px;text-align:right;font-weight:700}
+p{margin:8px 0;color:var(--sub)}
+button{font:inherit;cursor:pointer}
+.go{background:var(--accent);color:#fff;border:0;border-radius:999px;padding:12px 32px;font-size:18px;font-weight:700;margin-top:12px}
+.bar{height:10px;background:var(--line);border-radius:9px;overflow:hidden;margin-bottom:16px}
+.bar i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.opt{display:block;width:100%;text-align:left;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:16px;padding:12px 14px;margin:10px 0;font-size:17px}
+.opt:hover,.opt:focus{border-color:var(--accent)}
+.scene{font-size:19px;color:var(--ink);font-weight:600;text-align:left}
+.badge{display:inline-block;color:#fff;border-radius:999px;padding:4px 16px;font-weight:700;margin:4px 0}
+.tabs{display:flex;gap:8px;justify-content:center;margin:16px 0 8px}
+.tab{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:6px 16px;font-weight:600}
+.tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.book{text-align:left;background:var(--bg);border:2px solid var(--line);border-radius:14px;padding:10px 14px;margin:8px 0}
+.book b{display:block}
+.tip{background:var(--bg);border-left:6px solid var(--accent);border-radius:12px;padding:10px 14px;text-align:left;margin:14px 0;color:var(--ink)}
+.small{font-size:13px}
+.pie{animation:popin .8s ease-out both}
+@keyframes popin{from{transform:rotate(-120deg) scale(.5);opacity:0}to{transform:none;opacity:1}}
+.lgs{min-width:150px;text-align:left}
+.sl,.lg{cursor:pointer;transition:opacity .2s}
+.sl.dim{opacity:.3}.lg.dim{opacity:.45}
+.info{background:var(--bg);border:2px dashed var(--line);border-radius:16px;padding:12px;margin:12px 0;text-align:center}
+.lg{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:15px;color:var(--ink)}
+.lg i{width:14px;height:14px;border-radius:50%;flex:none}
+.lg span{flex:1}
+.hd{font-size:17px;margin:18px 0 4px;text-align:left}
+.m{overflow:visible;transform-origin:50% 90%}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes sway{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) translateY(2px)}}
+@keyframes shake{0%,100%{transform:translateX(0) rotate(0)}25%{transform:translateX(-3px) rotate(-1.5deg)}75%{transform:translateX(3px) rotate(1.5deg)}}
+@keyframes tremble{0%,100%{transform:translate(0,0)}50%{transform:translate(1.5px,-1px)}}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes drop{0%{transform:translateY(0);opacity:1}100%{transform:translateY(16px);opacity:0}}
+.m-happy{animation:bounce .9s ease-in-out infinite}
+.m-sad{animation:sway 2.4s ease-in-out infinite}
+.m-angry{animation:shake .35s linear infinite}
+.m-scared{animation:tremble .18s linear infinite}
+.m-calm{animation:floaty 3s ease-in-out infinite}
+.m-pink{animation:pulse 1.1s ease-in-out infinite}
+.tear{animation:drop 1.4s ease-in infinite;transform-box:fill-box}
+.say{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:999px;padding:2px 12px;font-size:16px;vertical-align:middle}
+.say:hover{border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){.m,.tear,.pie{animation:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap"><div id="app" class="card"></div></div>
+<script>
+const E={
+pink:{n:"愛與友情",en:"Love",c:"#ec6fa5",emo:"💗",t:"暖呼呼的擁抱怪",like:"I feel like a warm hug!",desc:"你的心裡暖呼呼的，像被一個大大的擁抱包住。",tip:"把這份溫暖說出來！對朋友或家人說一句「謝謝你」，或畫一張小卡片送給他們。"},
+happy:{n:"開心",en:"Happiness",c:"#f4b400",emo:"😄",t:"閃閃發亮的小太陽怪",like:"I feel like sunshine!",desc:"你的心裡像有一顆小太陽，暖暖亮亮的！",tip:"把這份開心分享給朋友，或寫下今天最棒的一件事，需要時就拿出來看看。"},
+sad:{n:"難過",en:"Sadness",c:"#3b82f6",emo:"😢",t:"下小雨的藍藍怪",like:"I feel like rain.",desc:"你的心裡正在下一場小雨，沉沉的、有點想哭。",tip:"允許自己休息一下，找信任的老師、家人或朋友聊聊，也可以畫畫、寫日記或聽音樂。"},
+angry:{n:"生氣",en:"Anger",c:"#e53935",emo:"😠",t:"冒泡泡的小火山怪",like:"I feel like a volcano!",desc:"你的心裡有座小火山，岩漿正在冒泡！",tip:"先做「4-4 慢速呼吸」：吸氣 4 秒、吐氣 4 秒，或喝口水，等岩漿降溫再好好說。"},
+scared:{n:"害怕／緊張",en:"Fear",c:"#555a66",emo:"😨",t:"躲在夜裡的小黑怪",like:"I feel like a dark night.",desc:"你的心裡好像有點暗暗的，有些擔心和不安。",tip:"告訴自己「我現在是安全的」，把擔心的事說出來或寫下來，主動找身邊的大人幫忙。"},
+calm:{n:"平靜",en:"Calm",c:"#43a047",emo:"😌",t:"安安靜靜的綠葉怪",like:"I feel like a green leaf.",desc:"你的心裡像一片綠葉，輕輕柔柔、很安穩。",tip:"閉上眼睛感受呼吸，把這份舒服的感覺記在心裡，難過時可以回來找它。"}
+};
+/* ★ 書單（依館藏 32 本）：[書名, 閱讀重點, 適讀年級 L低/M中/H高] ，可自行調整年級 ★ */
+const B={
+angry:[["我想生氣的時候該怎麼辦？","覺察生氣訊號與學習消氣方法","LM"],["會生氣的山","理解憤怒爆發與平息的過程","LM"],["大吼大叫的企鵝媽媽","面對親子間的發脾氣與衝突修復","L"],["SEL解憂小學堂4：我才沒有愛生氣！","練習控制脾氣與表達不滿","MH"]],
+sad:[["愛哭也沒關係","接納悲傷與眼淚，建立挫折復原力","L"],["難過的絨毛小狗","辨識低落情緒與尋求安慰","L"],["我好難過","認識悲傷的感受並學習自我安撫","LM"],["SEL解憂小學堂2：可以不要練琴嗎？","面對學習挫敗與委屈低落感","MH"],["安心國小10：大家都不懂我！","排解不被理解的孤單與失落","MH"]],
+scared:[["我好害怕","理解害怕時的身體反應與安全感建立","L"],["還有什麼好怕的？","認識恐懼來源並練習面對未知","LM"],["朱瑞福的游泳課","克服怕水心理與突破自我設限","LM"],["賽米希的煩惱","化解日常擔憂與過度焦慮","LM"],["願望年糕屋2：不再膽小的勇敢龍糕","累積勇氣面對膽怯事物","M"],["SEL解憂小學堂1：為何我考試超緊張？","緩解考試壓力與表現焦慮","MH"],["SEL解憂小學堂3：我真的不想開學！","調適環境變動與開學前的恐懼","MH"]],
+calm:[["好冷靜好冷靜的鱷魚醫生","在混亂中保持冷靜與專注","L"],["時間，等等我","放慢生活步調，感受當下的寧靜","LM"],["會走路的人：林良爺爺給青少年的情商課","透過內省與閱讀安頓身心","H"]],
+happy:[["三個橘色的點","接納獨特之處，建立自我肯定與喜悅","LM"],["安心國小4：抱怨靠邊站","轉換負面思維，找回好心情與正向動力","MH"]],
+pink:[["頑固的鱷魚奶奶","透過同理心打破隔閡、建立友誼","L"],["願望年糕屋1：說好話的甜言蜜語糕","學習良善表達與溫暖互動","M"],["好好說話，到哪都是人氣王！","掌握友善溝通技巧與人際相處","MH"],["好好交朋友，找到真正的超級好麻吉","學習經營友情與互助合作","MH"],["安心國小2：冰紅茶霸凌事件","理解同儕衝突、界線與彼此關懷","MH"],["安心國小9：有話好好說","練習在人際摩擦中真誠溝通","MH"],["好好溝通！為什麼全世界只有我爸媽都這樣？","增進親子雙向理解與情感連結","H"]],
+mix:[["顏色妖怪（立體書）","認識並整理混雜在一起的多種情緒","LMH"],["跟情緒怪獸做朋友","學習與各種日常情緒和平共處","LM"],["情緒都在忙什麼？","系統性認識不同情緒的功能與變化","MH"],["我好嫉妒","探索嫉妒背後交織的比較心態與失落感","LM"]]
+};
+const G={low:"L",mid:"M",high:"H"};
+function list(arr){const r=arr.filter(b=>b[2].includes(G[grade]));return r.length?r.map(b=>`<div class="book"><b>《${b[0]}》</b><div>${b[1]}</div></div>`).join(""):`<p class="small">這個年級的館藏較少，可以看看其他年級的書喔！</p>`}
+const ALL=["happy","sad","angry","scared","calm","pink"];
+let GID=0;
+function fur(cx,cy,rx,ry,n){let d="";for(let i=0;i<n;i++){const a=i/n*2*Math.PI,f=(i%2?1.09:.96)*(1+.03*Math.sin(i*2.3));d+=(i?"L":"M")+(cx+rx*f*Math.cos(a)).toFixed(1)+" "+(cy+ry*f*Math.sin(a)).toFixed(1)}return d+"Z"}
+const FUR=fur(50,52,33,32,44);
+function monster(k,sz,acc,k2){
+const c=E[k].c;let eyes,brow="",mouth,extra="";
+const eye=(x,r)=>`<circle cx="${x}" cy="48" r="${r}" fill="#fff"/><circle cx="${x}" cy="49" r="${r/2.2}" fill="#222"/>`;
+const st='fill="none" stroke="#222" stroke-width="3" stroke-linecap="round"';
+if(k==="calm"){eyes=`<path d="M30 48 Q37 55 44 48" ${st}/><path d="M56 48 Q63 55 70 48" ${st}/>`;mouth=`<path d="M40 66 Q50 73 60 66" ${st}/>`}
+else{const r=k==="scared"?9:7;eyes=eye(37,r)+eye(63,r);
+if(k==="pink"){mouth=`<path d="M40 64 Q50 74 60 64" ${st}/>`;brow=`<circle cx="26" cy="62" r="5" fill="#ffd1e3"/><circle cx="74" cy="62" r="5" fill="#ffd1e3"/><path d="M50 24 C50 16 40 16 40 23 C40 28 50 33 50 33 C50 33 60 28 60 23 C60 16 50 16 50 24Z" fill="#fff" opacity=".9"/>`}
+if(k==="happy")mouth=`<path d="M34 62 Q50 82 66 62 Z" fill="#7a1f1f" stroke="#222" stroke-width="3" stroke-linejoin="round"/>`;
+if(k==="sad"){mouth=`<path d="M37 72 Q50 60 63 72" ${st}/>`;brow=`<path d="M28 38 L44 33" ${st}/><path d="M72 38 L56 33" ${st}/>`;brow+=`<path class="tear" d="M30 58 Q26 66 30 70 Q34 66 30 58Z" fill="#8ecbff"/>`}
+if(k==="angry"){mouth=`<path d="M36 70 L43 64 L50 70 L57 64 L64 70" ${st}/>`;brow=`<path d="M27 36 L45 44" ${st}/><path d="M73 36 L55 44" ${st}/>`;extra=`<path d="M30 20 L38 8 L44 22Z M70 20 L62 8 L56 22Z" fill="${c}"/>`}
+if(k==="scared"){mouth=`<ellipse cx="50" cy="68" rx="6" ry="8" fill="#222"/>`;brow=`<path d="M28 32 L44 36" ${st}/><path d="M72 32 L56 36" ${st}/>`}}
+const c2=k2&&k2!==k?E[k2].c:null,gid="g"+(++GID),fl=c2?`url(#${gid})`:c,cl=c,cr=c2||c,up=k==="happy"||k==="pink";
+const defs=c2?`<defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1"><stop offset=".3" stop-color="${c}"/><stop offset=".7" stop-color="${c2}"/></linearGradient></defs>`:"";
+const armL=up?"M18 56 Q8 48 8 36":"M18 58 Q8 64 7 74",armR=up?"M82 56 Q92 48 92 36":"M82 58 Q92 64 93 74";
+const limbs=`<g fill="none" stroke-width="5" stroke-linecap="round"><path d="${armL}" stroke="${cl}"/><path d="${armR}" stroke="${cr}"/><path d="M40 82 L37 95" stroke="${cl}"/><path d="M60 82 L63 95" stroke="${cr}"/></g><ellipse cx="34" cy="96" rx="6" ry="3" fill="${cl}"/><ellipse cx="66" cy="96" rx="6" ry="3" fill="${cr}"/>`;
+const tuft=`<path d="M44 20 Q42 10 46 5 M50 19 Q50 8 52 3 M56 20 Q60 10 58 6" fill="none" stroke="${cl}" stroke-width="3" stroke-linecap="round"/>`;
+const body=`<path d="${FUR}" fill="${fl}" stroke="${fl}" stroke-width="4" stroke-linejoin="round"/>`;
+const tex=`<path d="M24 44 Q28 40 32 44 M66 72 Q70 68 74 72 M28 72 Q32 76 36 72 M68 40 Q72 36 76 40" fill="none" stroke="#fff" opacity=".25" stroke-width="3" stroke-linecap="round"/>`;
+const patch=c2?`<path d="M22 66 Q30 58 36 66 Q30 74 22 66Z" fill="${c2}" opacity=".7"/><path d="M64 34 Q72 28 78 36 Q70 42 64 34Z" fill="${c}" opacity=".7"/><path d="M60 70 Q68 62 74 70 Q66 78 60 70Z" fill="${c}" opacity=".5"/>`:"";
+return `<svg width="${sz}" height="${sz}" class="m m-${k}" viewBox="0 0 100 100" role="img" aria-label="${E[k].n}小怪獸">${extra}${limbs}${tuft}${defs}${body}${tex}${patch}${eyes}${brow}${mouth}${(acc||[]).map(accSvg).join("")}</svg>`}
+function say(t){try{const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u)}catch(e){alert("這台裝置無法播放語音")}}
+let outfits=[[],[]];
+const ACC={crown:["👑","皇冠"],hat:["🎉","派對帽"],bow:["🎀","蝴蝶結"],glass:["🕶️","墨鏡"],star:["⭐","星星"],scarf:["🧣","圍巾"]};
+function accSvg(a){return {
+crown:'<path d="M30 22 L35 4 L43 15 L50 0 L57 15 L65 4 L70 22Z" fill="#ffd54a" stroke="#c99a00" stroke-width="1.5" stroke-linejoin="round"/>',
+hat:'<path d="M50 -6 L36 22 L64 22Z" fill="#7e57c2"/><circle cx="50" cy="-6" r="4" fill="#ffd54a"/><circle cx="46" cy="10" r="2.5" fill="#fff"/><circle cx="54" cy="16" r="2.5" fill="#ffd54a"/>',
+bow:'<path d="M66 20 L82 11 L82 29Z M66 20 L50 11 L50 29Z" fill="#ff6fa0"/><circle cx="66" cy="20" r="4" fill="#e0457f"/>',
+glass:'<circle cx="37" cy="48" r="12" fill="#222" opacity=".85"/><circle cx="63" cy="48" r="12" fill="#222" opacity=".85"/><path d="M49 47 L51 47" stroke="#222" stroke-width="3"/>',
+star:'<polygon points="84,10 87,19 96,19 89,25 92,34 84,28 76,34 79,25 72,19 81,19" fill="#ffd54a" stroke="#c99a00" stroke-width="1.5" stroke-linejoin="round"/>',
+scarf:'<path d="M22 78 Q50 92 78 78 L78 88 Q50 102 22 88Z" fill="#e53935"/><path d="M62 88 L70 104 L78 100 L72 86Z" fill="#c62828"/>'}[a]||""}
+function randOutfit(){let k=Object.keys(ACC).sort(()=>Math.random()-.5).slice(0,1+Math.floor(Math.random()*3));if(k.includes("crown")&&k.includes("hat"))k=k.filter(x=>x!=="hat");return k}
+function sel(k){
+document.querySelectorAll("[data-k]").forEach(e=>e.classList.toggle("dim",e.dataset.k!==k));
+const x=E[k],p=Math.round(score[k]/Q.length*100);
+document.getElementById("info").innerHTML=`<div class="row" style="align-items:center;gap:12px">${monster(k,90)}<div style="text-align:left"><b>${x.t}</b><br><span class="small">${x.en}｜${x.n}｜你的比例 ${p}%</span></div></div><p><b>${x.like}</b> <button class="say" onclick="say('${x.en}. ${x.like}')">🔊 聽聽看</button></p><p>${x.desc}</p><div class="tip" style="margin:8px 0 0">💡 ${x.tip}</div>`}
+function bars(){
+const C=2*Math.PI*36,sorted=ALL.slice().sort((a,b)=>score[b]-score[a]);
+let off=0;const sl=sorted.filter(k=>score[k]>0).map(k=>{const len=score[k]/Q.length*C;const el=`<circle class="sl" data-k="${k}" onclick="sel('${k}')" cx="50" cy="50" r="36" fill="none" stroke="${E[k].c}" stroke-width="24" stroke-dasharray="${len} ${C-len}" stroke-dashoffset="${-off}" transform="rotate(-90 50 50)"/>`;off+=len;return el}).join("");
+const t=sorted[0],tp=Math.round(score[t]/Q.length*100);
+const pie=`<svg class="pie" width="220" height="220" viewBox="0 0 100 100" role="img" aria-label="情緒比例圓餅圖"><circle cx="50" cy="50" r="36" fill="none" stroke="var(--line)" stroke-width="24"/>${sl}<text x="50" y="49" text-anchor="middle" font-size="15" font-weight="700" style="fill:var(--ink)">${tp}%</text><text x="50" y="61" text-anchor="middle" font-size="7" style="fill:var(--sub)">${E[t].n.split("／")[0]}</text></svg>`;
+const lg=sorted.map(k=>`<div class="lg" data-k="${k}" onclick="sel('${k}')"><i style="background:${E[k].c}"></i><span>${E[k].n.split("／")[0]}</span><b>${Math.round(score[k]/Q.length*100)}%</b></div>`).join("");
+return `<div class="row" style="align-items:center;gap:12px">${pie}<div class="lgs">${lg}</div></div><div id="info" class="info"><p class="small">👆 點點看圓餅上的顏色，認識每一隻怪獸！</p></div>`}
+const Q=[
+["早上到學校，發現作業忘記帶了！你的第一個反應是…",["哎呀，下次記得就好，先跟老師說一聲","心裡一沉，覺得自己好糟糕","好煩喔！為什麼早上沒人提醒我！","好擔心老師會不會罵我","笑一笑，今天的天氣好好","朋友笑著說：「我借你看！」心裡覺得好暖"],["calm","sad","angry","scared","happy","pink"]],
+["下課時，同學們玩得很開心，卻沒有人找你一起玩。你會…",["自己找事做，也挺自在","覺得好孤單，想躲起來哭","覺得不公平，有點生氣","怕大家是不是不喜歡我","主動跑去問：我可以加入嗎？","走向另一位落單的同學，問他要不要一起玩"],["calm","sad","angry","scared","happy","pink"]],
+["老師突然宣布：「等一下要上台報告！」你的心情是…",["深呼吸，一步一步來","覺得自己一定做不好，好沮喪","為什麼不先通知，真討厭！","心跳好快、手心冒汗","太好了，我想上台表現！","想到台下的朋友會幫我加油，心裡暖暖的"],["calm","sad","angry","scared","happy","pink"]],
+["你最愛的玩具（或文具）被弟弟妹妹（或同學）弄壞了！",["看看能不能修，慢慢來","眼淚快掉下來了","氣到想大叫！","怕以後再也不能用了","沒關係，我可以再做一個新的","朋友說「我來幫你」，讓我覺得好感動"],["calm","sad","angry","scared","happy","pink"]],
+["晚上關燈後，房間好安靜、黑黑的，你覺得…",["身體放鬆，很快就想睡了","想起白天的事，有點難過","還在氣白天發生的事睡不著","覺得黑暗中好像有東西","在腦中回想今天的好玩事","想起家人和朋友的笑臉，心裡暖暖的"],["calm","sad","angry","scared","happy","pink"]],
+["如果可以許一個願望，讓現在的心情變得更好，你會想要…",["有一個安靜的角落，好好休息","有人抱抱我、聽我說說話","把心裡的火氣一次大聲吼出來","有人陪著我、讓我覺得安全","跟大家一起開派對","跟喜歡的人聊聊天，互相說聲謝謝"],["calm","sad","angry","scared","happy","pink"]]
+];
+let i=0,score={},grade="low",tops=[];
+const app=document.getElementById("app");
+function start(){i=0;score={};ALL.forEach(k=>score[k]=0);
+app.innerHTML=`<div class="row">${ALL.map(k=>monster(k,64)).join("")}</div><h1>我是哪一隻情緒小怪獸？</h1><p>6 個小情境，找出今天住在你心裡的情緒小怪獸，還有適合你讀的書喔！</p><p class="small">沒有對錯，每一種情緒都可以！ All feelings are OK! ♡</p><button class="go" onclick="show()">開始測驗</button>`}
+function show(){
+if(i>=Q.length)return result();
+const q=Q[i];
+app.innerHTML=`<div class="bar"><i style="width:${i/Q.length*100}%"></i></div><p class="small">第 ${i+1} / ${Q.length} 題</p><div class="scene">${q[0]}</div>`+
+q[1].map((t,j)=>[t,j]).sort(()=>Math.random()-.5).map(([t,j])=>`<button class="opt" onclick="pick('${q[2][j]}')">${t}</button>`).join("")}
+function pick(k){score[k]++;i++;show()}
+function result(){
+const s=ALL.slice().sort((a,b)=>score[b]-score[a]);
+tops=[s[0]];if(score[s[1]]===score[s[0]])tops.push(s[1]);
+grade="low";outfits=[randOutfit(),randOutfit()];render()}
+function render(){
+const m=E[tops[0]],mix=tops.length>1?E[tops[1]]:null;
+const bg=mix?`linear-gradient(90deg,${m.c},${mix.c})`:m.c;
+let h=`<div class="row">${monster(tops[0],150,outfits[0],tops[1])}</div><p class="small">今天的裝扮：${[outfits[0]].map(o=>o.map(a=>ACC[a][0]+" "+ACC[a][1]).join("＋")).join("　｜　")}</p><h2>你是「${mix?"混色怪獸（"+m.n+"＋"+mix.n+"）":m.t}」</h2><span class="badge" style="background:${bg}">${m.en}${mix?" + "+mix.en:""}</span><p>${m.desc}${mix?"　"+mix.n+"的比例一樣高，心情混在一起很正常喔！":""}</p>${[m,mix].filter(Boolean).map(x=>`<p><b>${x.like}</b> <button class="say" aria-label="播放英文" onclick="say('${x.en}. ${x.like}')">🔊 聽聽看</button></p>`).join("")}<h2 style="font-size:17px;margin-bottom:6px">📊 你的情緒比例</h2>${bars()}<div class="tip"><b>💡 照顧心情小法寶</b><br>${m.tip}${mix?"<br>"+mix.tip:""}</div><h2>📚 推薦你讀的書</h2><div class="tabs">`;
+[["low","低年級"],["mid","中年級"],["high","高年級"]].forEach(([g,n])=>h+=`<button class="tab ${g===grade?"on":""}" onclick="grade='${g}';render()">${n}</button>`);
+h+=`</div>`;
+tops.forEach(k=>{h+=`<h3 class="hd">${E[k].emo} ${E[k].n}主題</h3>`+list(B[k])});
+h+=`<h3 class="hd">🌈 綜合情緒覺察</h3>`+list(B.mix)+(tops.includes("pink")?"":`<h3 class="hd">💗 好好說話、好好交朋友</h3>`+list(B.pink));
+h+=`<p class="small">快到圖書館主題書展找找看吧！</p><button class="go" onclick="start()">再測一次</button>`;
+app.innerHTML=h}
+start();
+</script>
+</body>
+</html>
